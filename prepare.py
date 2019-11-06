@@ -1,56 +1,53 @@
-# PREP
+from env import host, user, password
+from acquire import get_zillow
+import pandas as pd
+import numpy as np
 
 # from bayes methodologies repo, fills zeros in nulls
 def fill_zero(df, cols):
     df.fillna(value=0, inplace=True)
     return df
 
-# drop ID column
-def drop_id(df):
-	return
+# from bayes methodologies repo, fills zeros in nulls
+def handle_missing_values(df, prop_required_column = .5, prop_required_row = .75):
+    threshold = int(round(prop_required_column*len(df.index),0))
+    df.dropna(axis=1, thresh=threshold, inplace=True)
+    threshold = int(round(prop_required_row*len(df.columns),0))
+    df.dropna(axis=0, thresh=threshold, inplace=True)
+    return df
 
-# make parcelid the index
-def set_index_parcel(df):
-	return
+# drop ID and parcelid columns
+def drop_id(df):
+    df.drop(columns=['parcelid', 'id'], inplace=True)
+    return df
 
 # renaming columns to accomodate my laziness
 def lazy_col_names(df):
-	return
+	return df
 
-# drop unitcnt > 1
-def drop_obvious_units(df):
-	return
-
+# drop rows in which these columns are 0 or nan
+# use for bedcnt, bathcnt, calculatedfinishedsquarefeet
 # drop bed = 0
-def drop_no_beds(df):
-	return
+def drop_bad_zeros(df, cols):
+    fill_zero(df, cols)
+    for col in cols:
+        df = df.drop((df[col] == 0).index)
+    return df
 
-# drop bath = 0
-def drop_no_baths(df):
-	return
-
-# drop if calculatedfinishedsquarefeet is null
-def drop_no_buildings(df):
-	return
-
-# drop all condos (imo questionable, at Maggie's behest). condo is type 266
-# maybe look at condos.
-# drop those with probably >1 unitcnt where unitcnt is null
-# unlikely single unit: residential general, duplex, quadruplex, triplex, cluster home, commerical/office/residential mixed use
-def drop_probable_units(df):
-	bad_types = [31, 246, 247, 248, 260, 265, 266, 263, ]
-	return
+# FEATURES IDEAS:
+# tax rate, house age
 
 def prep_zillow(df):
-	prep = drop_id(df)
-	prep = set_index_parcel(prep)
-	prep = lazy_col_names(prep)
-	prep = drop_obvious_units(prep)
-	prep = drop_no_beds(prep)
-	prep = drop_no_baths(prep)
-	prep = drop_no_buildings(prep)
-	prep = drop_condos(prep)
-	prep = drop_probable_units(prep)
-	to_zero = []
-	prep = fill_zero(prep, to_zero)
-	return prep
+    prep = drop_id(df)
+    prep = handle_missing_values(prep, .1, .6)
+    # drop columns that appear to provide little information
+    prep.drop(columns=['assessmentyear', 'unitcnt', 'finishedsquarefeet12', 'propertylandusetypeid', 'rawcensustractandblock', ], inplace=True)
+    prep = lazy_col_names(prep)
+    prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet'])
+    to_zero = []
+    prep = fill_zero(prep, to_zero)
+    return prep
+
+if __name__ == '__main__':
+    zillow = get_zillow()
+    prep = prep_zillow(zillow)
