@@ -38,7 +38,7 @@ def prep_zillow(df, drop_outliers=True):
     prep = handle_missing_values(prep, .1, .6)
     # drop columns that appear to provide little information
     prep.drop(columns=['assessmentyear', 'unitcnt', 'finishedsquarefeet12', 'propertylandusetypeid', 'rawcensustractandblock', 'censustractandblock',
-                        'threequarterbathnbr'], inplace=True)
+                        'threequarterbathnbr', 'pooltypeid7'], inplace=True)
     prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet'])
     lazy = {'logerror': 'logerror', 'transactiondate': 'date', 'airconditioningtypeid': 'ac', 'bathroomcnt': 'baths', 'bedroomcnt': 'beds',
             'buildingqualitytypeid': 'quality', 'calculatedbathnbr': 'calculatedbathnbr', 'calculatedfinishedsquarefeet': 'sqft',
