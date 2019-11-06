@@ -6,3 +6,4 @@ __pycache__
 mock_assessment.*
 checkbook_log.txt
 ~$*
+pena_zillow.py
