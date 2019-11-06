@@ -1,0 +1,36 @@
+Notes:
+- many columns have loads of nulls. Probably going to drop those
+- transactiondate is an object instead of some sort of number or date, so it can't sort or display max/min
+- There appears to be a 2018 transaction date
+- id is totally uninformative
+- nulls for basementsqft probably mean no basement
+- some of the nulls for AC type id might mean no AC, but there's no way over half the listings lack AC
+- someone has a 3200+ sqft basement, 2800+ sqft basement is pretty huge too
+- only 12 people with 9+ bathrooms
+- 18 with 12+ bedrooms
+- buildingclasstypeid doesn't seem particularly useful
+- buildingqualitytypeid is really a scale (apparently from 1 to 12??) of how well-built the building is
+- decktypeid seems super useless. 614 have type 16 deck which isn't defined anywhere.
+- There are several different sqft metrics. calculated sames most useful based on the definitions in data_dict
+- some buildings seem to be way too large to be single-unit. There are 23 above 10.7k sqft and 1 over 30k
+- there are some really high garagecarcnts
+- there are a fair few really large garages
+- nulls in hashottuborspa appear to mean that they don't have hot tubs or spas
+- holy cannoli there are some massive lot sizes. the 7 with >6M sqft lot size appear to be mislabeled. Perhaps investigate the other high ones later. The 7 houses referenced are pictured below. I believe the entire subdivision lot was listed as the lot size.
+- pooltype columns refer to whether the pool is just pool, just hot tub, or both. it's like onehotencoder of pooltype kind of.
+- propertylandusecode is county zoning stuff. could be useful in identifying single-unit properties. Probably differs across counties? worth investigating
+- If no unit count, drop these propertylandusedescs: residential general, duplex, quadruplex, triplex, cluster home, commerical/office/residential mixed use
+- propertyzoningdesc is another zoning column? not sure on the differences between these three
+- rawcensustractandblock and regionidcity should probably be categorical, and others involved in this fips categorization
+- Very unclear what 0 roomcnt means since they appear to have nonzero bathroomcnt and bedroomcnt. 
+- storytypeid relays no information because it only indicates whether a building has a basement, which is already indicated by a non-null value in basementsqft
+- really not seeing the value in typeconstructiontypeid. similarly unclear what a null value here indicates
+- of course we will drop all unitcnts > 1, and make an educated guess about which null unitcnt properties really have a unitcnt of 1 based on the value_counts within the unitcnt==1 cohort
+- there are some strangely large sheds based on yardbuildingsqft. I'm thinking the particularly large ones probably indicate unitcnt > 1 but we shall see
+- yearbuilt could influence value. not really going to influence what I drop/don't.
+- Six-story house is somehow single-family residential, zoning is unclear but based on comparison of unitcnt == 1 and unitcnt > 1 cohorts, it appears to actually be single-unit. very strange. Latitude, longitude search on google maps shows an elementary school. There is no building in the vicinity that has >1 story.
+- fireplaceflag indicates whether or not there is a fireplace at the houses in which fireplacecnt is null.
+- probably drop the particularly expensive properties
+- null taxdelinquencyflag means their taxes are not past due as of 2015
+- taxdelinquencyyear is year from which your delinquent taxes are due. Should be restructured to be a four digit number instead of '99, '00, '01, etc.
+- anything with null calculatedfinishedsquarefeet should be dropped.
