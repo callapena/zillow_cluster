@@ -17,6 +17,8 @@ df = acquire.get_zillow()
 df = df[['logerror', 'parcelid','calculatedfinishedsquarefeet','fips','latitude', 'longitude', 'lotsizesquarefeet', 'yearbuilt', 'taxvaluedollarcnt']]
 df.info()
 df.yearbuilt.value_counts().sort_index()
+
+#### Home
 df['home_age'] = 2017 - df.yearbuilt
 df.home_age.value_counts().sort_index()
 
@@ -51,6 +53,8 @@ lm1.fit(X, y)
 
 y_pred_lm1 = lm1.predict(X)
 
+
+###Scores
 mean_squared_error(y, y_pred_lm1)
 
 r2_score(y, y_pred_lm1)
