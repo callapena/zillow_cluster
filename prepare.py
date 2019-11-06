@@ -18,7 +18,7 @@ def handle_missing_values(df, prop_required_column = .5, prop_required_row = .75
 
 # drop ID and parcelid columns
 def drop_id(df):
-    df.drop(columns=['parcelid', 'id'], inplace=True)
+    df = df.drop(columns=['parcelid', 'id'])
     return df
 
 # drop rows in which these columns are 0 or nan
@@ -27,7 +27,7 @@ def drop_id(df):
 def drop_bad_zeros(df, cols):
     fill_zero(df, cols)
     for col in cols:
-        df = df.drop((df[col] == 0).index)
+        df = df.drop(df[df[col] == 0].index)
     return df
 
 # FEATURES IDEAS:
@@ -39,10 +39,10 @@ def prep_zillow(df):
     # drop columns that appear to provide little information
     prep.drop(columns=['assessmentyear', 'unitcnt', 'finishedsquarefeet12', 'propertylandusetypeid', 'rawcensustractandblock', ], inplace=True)
     prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet'])
-    to_zero = []
-    prep = fill_zero(prep, to_zero)
-    lazy = {}
-    prep = prep.rename(lazy)
+    # to_zero = []
+    # prep = fill_zero(prep, to_zero)
+    # lazy = {}
+    # prep = prep.rename(lazy)
     return prep
 
 if __name__ == '__main__':
