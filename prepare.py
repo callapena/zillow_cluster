@@ -21,10 +21,6 @@ def drop_id(df):
     df.drop(columns=['parcelid', 'id'], inplace=True)
     return df
 
-# renaming columns to accomodate my laziness
-def lazy_col_names(df):
-	return df
-
 # drop rows in which these columns are 0 or nan
 # use for bedcnt, bathcnt, calculatedfinishedsquarefeet
 # drop bed = 0
@@ -42,10 +38,11 @@ def prep_zillow(df):
     prep = handle_missing_values(prep, .1, .6)
     # drop columns that appear to provide little information
     prep.drop(columns=['assessmentyear', 'unitcnt', 'finishedsquarefeet12', 'propertylandusetypeid', 'rawcensustractandblock', ], inplace=True)
-    prep = lazy_col_names(prep)
     prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet'])
     to_zero = []
     prep = fill_zero(prep, to_zero)
+    lazy = {}
+    prep = prep.rename(lazy)
     return prep
 
 if __name__ == '__main__':
