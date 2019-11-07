@@ -22,8 +22,7 @@ def linear_impute(df):
     lm1 = LinearRegression()
     lm1.fit(land_lot_df[['landtaxvaluedollarcnt']], land_lot_df[['lotsizesquarefeet']])
     X = df[(df.lotsizesquarefeet.isna()==True)][['landtaxvaluedollarcnt']]
-    y_hat = pd.DataFrame(lm1.predict(X),columns = ['yhat']).set_index(X.index.values)
-    y_hat = y_hat.yhat
+    y_hat = pd.DataFrame(lm1.predict(X),columns = ['yhat']).set_index(X.index.values).yhat
     df['lotsizesquarefeet'] = df.lotsizesquarefeet.fillna(y_hat)
     return df
 
