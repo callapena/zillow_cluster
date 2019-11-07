@@ -1,5 +1,6 @@
 from env import host, user, password
 from acquire import get_zillow
+from linear_impute_landtax_lotsize import linear_impute
 import pandas as pd
 import numpy as np
 
@@ -31,7 +32,8 @@ def drop_bad_zeros(df, cols):
     return df
 
 # OUTLIERS TO DROP
-# baths > 7, beds > 7, sqft > 10k, garages > 5, sqft > 10k, lot > 30000
+# baths > 7, beds > 7, sqft > 10k, garages > 5, sqft > 10k, lot > 30000, strucvalue = 0, strucvalue > 1e6
+# Hold off on dropping beds/baths/garages until after we drop the other outliers
 
 def prep_zillow(df, drop_outliers=True):
     prep = drop_id(df)
@@ -49,7 +51,7 @@ def prep_zillow(df, drop_outliers=True):
             'numberofstories': 'stories', 'structuretaxvaluedollarcnt': 'strucvalue', 'taxvaluedollarcnt': 'value', 'landtaxvaluedollarcnt': 'landvalue',
             'taxamount': 'tax'}
     prep = prep.rename(columns=lazy)
-    to_zero = ['fireplace', 'fullbaths']
+    to_zero = ['fireplace', 'fullbaths', 'pool']
     prep = fill_zero(prep, to_zero)
     return prep
 
