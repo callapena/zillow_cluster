@@ -45,6 +45,18 @@ def drop_outliers(df, drop_dict):
                 df = df.drop((df[df[var] <= drop_dict[var][key]]).index)
     return df
 
+def feature_prep(df):
+    # Convert year built to house age
+    df['age'] = 2017 - df['year']
+    df = df.drop(columns='year')
+
+    # Make tax rate variable in place of tax
+    df['tax'] = df['tax'] / df['value']
+
+    # Make fireplace boolean-ish
+    df['fireplace'] = (df[['fireplace']] > 0).astype(int)
+    return df
+
 def prep_zillow(df, outliers=True):
     prep = drop_id(df)
 
@@ -53,7 +65,7 @@ def prep_zillow(df, outliers=True):
 
     # drop columns that appear to provide little information
     prep.drop(columns=['assessmentyear', 'unitcnt', 'finishedsquarefeet12', 'propertylandusetypeid', 'rawcensustractandblock', 'censustractandblock',
-                        'threequarterbathnbr', 'pooltypeid7'], inplace=True)
+                        'threequarterbathnbr', 'pooltypeid7', 'roomcnt', 'buildingqualitytypeid', 'calculatedbathnbr'], inplace=True)
 
     # drop rows that have 0/null beds, baths, or sqft
     prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet'])
@@ -77,16 +89,21 @@ def prep_zillow(df, outliers=True):
                     'strucvalue': {'over': 1e6, 'under': 0}, 
                     'beds': {'over': 7}, 
                     'baths': {'over': 7}, 
-                    'garage': {'over': 5}}
+                    'garage': {'over': 5},
+                    'stories' : {'over': 3}}
         prep = drop_outliers(prep, drop_dict)
+
+    # Drop columns we presently have no use for, but may be useful later
+    prep = prep.drop(columns=['ac', 'fullbaths', 'heating', 'usecode', 'zoning', 'city', 'altcounty', 'neighborhood', 'zip', 'stories'])
 
     # IMPUTATIONS
     # We noticed there was a roughly linear correlation between land value and lot size
     prep = linear_impute(prep, 'landvalue', 'lotsqft')
 
     # We believe nulls here represent no's or zeros
-    to_zero = ['fireplace', 'fullbaths', 'pool']
+    to_zero = ['fireplace', 'pool']
     prep = fill_zero(prep, to_zero)
+    prep = feature_prep(prep)
     return prep
 
 if __name__ == '__main__':

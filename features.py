@@ -14,7 +14,14 @@ from prepare import prep_zillow
 def feature_prep(df):
     # Convert year built to house age
     df['age'] = 2017 - df['year']
+    df = df.drop(columns='year')
 
     # Make tax rate variable in place of tax
     df['tax'] = df['tax'] / df['value']
+
+    # Make fireplace boolean-ish
+    df['fireplace'] = (df[['fireplace']] > 0).astype(int)
+    return df
+
+def scale(df):
     return df
