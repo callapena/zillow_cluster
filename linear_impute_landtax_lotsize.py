@@ -16,14 +16,14 @@ from sklearn.linear_model import LinearRegression
 
 # sns.scatterplot(x='landtaxvaluedollarcnt', y='logerror', data=df)
 
-def linear_impute(df):
-    rowdrop = df[(df.landtaxvaluedollarcnt.isna()==True) | (df.lotsizesquarefeet.isna()==True)].index
-    land_lot_df = df.drop(rowdrop)[['landtaxvaluedollarcnt','lotsizesquarefeet']]
+def linear_impute(df, x, y):
+    rowdrop = df[(df[x].isna()==True) | (df[y].isna()==True)].index
+    land_lot_df = df.drop(rowdrop)[[x, y]]
     lm1 = LinearRegression()
-    lm1.fit(land_lot_df[['landtaxvaluedollarcnt']], land_lot_df[['lotsizesquarefeet']])
-    X = df[(df.lotsizesquarefeet.isna()==True)][['landtaxvaluedollarcnt']]
+    lm1.fit(land_lot_df[[x]], land_lot_df[[y]])
+    X = df[(df[y].isna()==True)][[x]]
     y_hat = pd.DataFrame(lm1.predict(X),columns = ['yhat']).set_index(X.index.values).yhat
-    df['lotsizesquarefeet'] = df.lotsizesquarefeet.fillna(y_hat)
+    df[y] = df[y].fillna(y_hat)
     return df
 
 # df = linear_impute(df)

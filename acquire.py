@@ -24,6 +24,7 @@ def get_zillow():
 	url = get_db_url(user, host, password, 'zillow')
 
 	zillow = pd.read_sql(query, url)
+	# zillow.to_csv('zillow.csv')
 	return zillow
 
 # GET DATA DICTIONARIES OF ALL THE TYPE TABLES
