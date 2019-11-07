@@ -77,7 +77,7 @@ def prep_zillow(df, outliers=True):
                     'strucvalue': {'over': 1e6, 'under': 0}, 
                     'beds': {'over': 7}, 
                     'baths': {'over': 7}, 
-                    'garage': {'over': 5}}c
+                    'garage': {'over': 5}}
         prep = drop_outliers(prep, drop_dict)
 
     # IMPUTATIONS
