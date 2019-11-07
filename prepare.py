@@ -38,7 +38,7 @@ def drop_bad_zeros(df, cols):
 # Under is inclusive, over is exclusive.
 def drop_outliers(df, drop_dict):
     for var in drop_dict:
-        for key in var:
+        for key in drop_dict[var]:
             if key == 'over':
                 df = df.drop((df[df[var] > drop_dict[var][key]]).index)
             elif key == 'under':
@@ -77,7 +77,7 @@ def prep_zillow(df, outliers=True):
                     'strucvalue': {'over': 1e6, 'under': 0}, 
                     'beds': {'over': 7}, 
                     'baths': {'over': 7}, 
-                    'garage': {'over': 5}}
+                    'garage': {'over': 5}}c
         prep = drop_outliers(prep, drop_dict)
 
     # IMPUTATIONS
