@@ -66,3 +66,22 @@ minmax_scaler, train, test = scale(train, test, minmax, scaler='minmax')
 # CLUSTERS
 
 # MODEL
+
+def evaluate(model, x_train, y_train):
+    y_pred = model.predict(x_train)
+    rmse = mean_squared_error(y_train, y_pred)**1/2
+    return rmse
+
+# Takes a dictionary of models and returns the best performing model
+# Dictionary format example:
+# model_dict = {'model_name': {'obj': model_object, 'x': X_train, 'y': y_train}}
+def best_model(model_dict):
+    best = [None, 1]
+    for model in model_dict:
+        model_obj = model_dict[model]['obj']
+        x = model_dict[model]['x']
+        y = model_dict[model]['y']
+        error = evaluate(model_obj, x, y)
+        if error < best[1]:
+            best = [model_dict[model], error]
+    return best
