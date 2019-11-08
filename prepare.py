@@ -93,6 +93,9 @@ def prep_zillow(df, outliers=True):
                     'stories' : {'over': 3}}
         prep = drop_outliers(prep, drop_dict)
 
+    # Drop transaction dates in 2018
+    prep = prep.drop(prep[prep.date.apply(lambda x: "2018" in x)].index)
+
     # Drop columns we presently have no use for, but may be useful later
     prep = prep.drop(columns=['ac', 'fullbaths', 'heating', 'usecode', 'zoning', 'altcounty', 'neighborhood', 'zip', 'stories', 'garage', 'garagesqft'])
 
