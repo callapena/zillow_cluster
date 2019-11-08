@@ -48,6 +48,9 @@ train.corr()
 X = train[['sqft', 'lotsqft', 'tax', 'age']]
 y = train[['logerror']]
 
+X_test = test[['sqft', 'lotsqft', 'tax', 'age']]
+y_test = test[['logerror']]
+
 from sklearn.linear_model import LinearRegression
 X.info()
 
@@ -57,10 +60,13 @@ lm1.fit(X, y)
 
 y_pred_lm1 = lm1.predict(X)
 
+y_test_pred_lm1 = lm1.predict(X_test)
+
+
 
 ###Scores
 mean_squared_error(y, y_pred_lm1)**1/2
-
+mean_squared_error(y_test, y_test_pred_lm1)**1/2
 
 
 r2_score(y, y_pred_lm1)
