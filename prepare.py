@@ -107,6 +107,5 @@ def prep_zillow(df, outliers=True):
     return prep
 
 if __name__ == '__main__':
-    # zillow = get_zillow()
-    zillow = pd.read_csv('zillow.csv')
+    zillow = get_zillow()
     prep = prep_zillow(zillow)

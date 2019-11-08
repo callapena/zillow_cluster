@@ -1,6 +1,7 @@
 from env import host, user, password
 import pandas as pd
 import numpy as np
+import os.path
 
 def get_db_url(username, hostname, password, db_name):
     return f'mysql+pymysql://{username}:{password}@{hostname}/{db_name}'
@@ -23,8 +24,11 @@ def get_zillow():
 
 	url = get_db_url(user, host, password, 'zillow')
 
-	zillow = pd.read_sql(query, url)
-	# zillow.to_csv('zillow.csv')
+	if os.path.isfile('zillow.csv'):
+		zillow = pd.read_csv('zillow.csv')
+	else:
+		zillow = pd.read_sql(query, url)
+		zillow.to_csv('zillow.csv')
 	return zillow
 
 # GET DATA DICTIONARIES OF ALL THE TYPE TABLES
