@@ -67,9 +67,6 @@ def prep_zillow(df, outliers=True):
     prep.drop(columns=['assessmentyear', 'unitcnt', 'finishedsquarefeet12', 'propertylandusetypeid', 'rawcensustractandblock', 'censustractandblock',
                         'threequarterbathnbr', 'pooltypeid7', 'roomcnt', 'buildingqualitytypeid', 'calculatedbathnbr'], inplace=True)
 
-    # drop rows that have 0/null beds, baths, or sqft
-    prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet', 'taxvaluedollarcnt'])
-
     # dictionary for shorter names
     lazy = {'logerror': 'logerror', 'transactiondate': 'date', 'airconditioningtypeid': 'ac', 'bathroomcnt': 'baths', 'bedroomcnt': 'beds',
             'buildingqualitytypeid': 'quality', 'calculatedbathnbr': 'calculatedbathnbr', 'calculatedfinishedsquarefeet': 'sqft',
@@ -95,6 +92,9 @@ def prep_zillow(df, outliers=True):
                     'garage': {'over': 5},
                     'stories' : {'over': 3}}
         prep = drop_outliers(prep, drop_dict)
+
+    # Drop transaction dates in 2018
+    prep = prep.drop(prep[prep.date.apply(lambda x: "2018" in x)].index)
 
     # Drop columns we presently have no use for, but may be useful later
     prep = prep.drop(columns=['ac', 'fullbaths', 'heating', 'usecode', 'zoning', 'altcounty', 'neighborhood', 'zip', 'stories', 'garage', 'garagesqft'])
