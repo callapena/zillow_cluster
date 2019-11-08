@@ -79,7 +79,7 @@ def prep_zillow(df, outliers=True):
     prep = prep.rename(columns=lazy)
 
     # drop rows that have 0/null beds, baths, or sqft
-    prep = drop_bad_zeros(prep, ['beds', 'baths', 'sqft', 'value', 'year', 'city'])
+    prep = drop_bad_zeros(prep, ['beds', 'baths', 'sqft', 'value', 'year', 'city', 'tax'])
 
     # Drop outliers
     # Outliers were determined by looking at value_counts and distribution vizzes
