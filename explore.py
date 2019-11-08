@@ -36,11 +36,11 @@ plt.title('The Elbow Method to find the optimal k')
 plt.show()
 
 kmeans = KMeans(n_clusters = 4)
-kmeans.fit(train_vars[['logerror']])
+kmeans.fit(train[['logerror']])
 
 train['cluster_4'] = kmeans.predict(train[['logerror']])
 train.cluster_4.value_counts()
-train.cluster_4 = 'cluster_' + train_vars.cluster_4.astype('str')
+train.cluster_4 = 'cluster_' + train.cluster_4.astype('str')
 
 
 train.corr().logerror
