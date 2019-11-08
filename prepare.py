@@ -1,7 +1,7 @@
 from env import host, user, password
 from acquire import get_zillow
-from linear_impute_landtax_lotsize import linear_impute
 import pandas as pd
+from sklearn.linear_model import LinearRegression
 import numpy as np
 
 # from bayes methodologies repo, fills zeros in nulls
@@ -20,6 +20,17 @@ def handle_missing_values(df, prop_required_column = .5, prop_required_row = .75
 # drop ID and parcelid columns
 def drop_id(df):
     df = df.drop(columns=['parcelid', 'id'])
+    return df
+
+# impute y based on a linear regression of x and y
+def linear_impute(df, x, y):
+    rowdrop = df[(df[x].isna()==True) | (df[y].isna()==True)].index
+    land_lot_df = df.drop(rowdrop)[[x, y]]
+    lm1 = LinearRegression()
+    lm1.fit(land_lot_df[[x]], land_lot_df[[y]])
+    X = df[(df[y].isna()==True)][[x]]
+    y_hat = pd.DataFrame(lm1.predict(X),columns = ['yhat']).set_index(X.index.values).yhat
+    df[y] = df[y].fillna(y_hat)
     return df
 
 # drop rows in which these columns are 0 or nan
