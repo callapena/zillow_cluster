@@ -21,7 +21,8 @@ def feature_prep(df):
 
     # Make fireplace boolean-ish
     df['fireplace'] = (df[['fireplace']] > 0).astype(int)
-    return df
 
-def scale(df):
+    # Convert strucvalue and landvalue to value per sqft
+    df['strucvaluebysqft'] = df['strucvalue'] / df['sqft']
+    df['landvaluebysqft'] = df['landvalue'] / df['lotsqft']
     return df
