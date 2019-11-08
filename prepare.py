@@ -81,6 +81,9 @@ def prep_zillow(df, outliers=True):
             'taxamount': 'tax'}
     prep = prep.rename(columns=lazy)
 
+    # drop rows that have 0/null beds, baths, or sqft
+    prep = drop_bad_zeros(prep, ['beds', 'baths', 'sqft', 'value', 'year', 'city'])
+
     # Drop outliers
     # Outliers were determined by looking at value_counts and distribution vizzes
     if outliers:
@@ -94,11 +97,12 @@ def prep_zillow(df, outliers=True):
         prep = drop_outliers(prep, drop_dict)
 
     # Drop columns we presently have no use for, but may be useful later
-    prep = prep.drop(columns=['ac', 'fullbaths', 'heating', 'usecode', 'zoning', 'altcounty', 'neighborhood', 'zip', 'stories'])
+    prep = prep.drop(columns=['ac', 'fullbaths', 'heating', 'usecode', 'zoning', 'altcounty', 'neighborhood', 'zip', 'stories', 'garage', 'garagesqft'])
 
     # IMPUTATIONS
     # We noticed there was a roughly linear correlation between land value and lot size
     prep = linear_impute(prep, 'landvalue', 'lotsqft')
+    prep = linear_impute(prep, 'sqft', 'strucvalue')
 
     # We believe nulls here represent no's or zeros
     to_zero = ['fireplace', 'pool']
