@@ -11,6 +11,17 @@ from sklearn.linear_model import SGDRegressor, LassoCV
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.preprocessing import PolynomialFeatures 
 
-if __name__ == '__main__':
-    zillow = get_zillow()
-    zillow = prep_zillow(zillow)
+
+zillow = get_zillow()
+zillow = prep_zillow(zillow)
+
+# split data
+train, test = train_test_split(zillow, test_size=.30)
+
+features = ['baths', 'beds', 'sqft', 'fireplace', 'lat', 'long', 'lotsqft', 'pool', 'strucvalue', 'value', 'landvalue', 'tax', 'age']
+target = 'logerror'
+
+# SCALE
+
+# ENCODE FIPS AND CITY
+# actually not sure how to do that with city... there are many different values. might have to map them or something?

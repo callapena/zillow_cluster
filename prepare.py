@@ -67,9 +67,6 @@ def prep_zillow(df, outliers=True):
     prep.drop(columns=['assessmentyear', 'unitcnt', 'finishedsquarefeet12', 'propertylandusetypeid', 'rawcensustractandblock', 'censustractandblock',
                         'threequarterbathnbr', 'pooltypeid7', 'roomcnt', 'buildingqualitytypeid', 'calculatedbathnbr'], inplace=True)
 
-    # drop rows that have 0/null beds, baths, or sqft
-    prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet', 'taxvaluedollarcnt'])
-
     # dictionary for shorter names
     lazy = {'logerror': 'logerror', 'transactiondate': 'date', 'airconditioningtypeid': 'ac', 'bathroomcnt': 'baths', 'bedroomcnt': 'beds',
             'buildingqualitytypeid': 'quality', 'calculatedbathnbr': 'calculatedbathnbr', 'calculatedfinishedsquarefeet': 'sqft',
