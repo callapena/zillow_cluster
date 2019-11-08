@@ -68,7 +68,7 @@ def prep_zillow(df, outliers=True):
                         'threequarterbathnbr', 'pooltypeid7', 'roomcnt', 'buildingqualitytypeid', 'calculatedbathnbr'], inplace=True)
 
     # drop rows that have 0/null beds, baths, or sqft
-    prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet'])
+    prep = drop_bad_zeros(prep, ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet', 'taxvaluedollarcnt'])
 
     # dictionary for shorter names
     lazy = {'logerror': 'logerror', 'transactiondate': 'date', 'airconditioningtypeid': 'ac', 'bathroomcnt': 'baths', 'bedroomcnt': 'beds',
@@ -94,7 +94,7 @@ def prep_zillow(df, outliers=True):
         prep = drop_outliers(prep, drop_dict)
 
     # Drop columns we presently have no use for, but may be useful later
-    prep = prep.drop(columns=['ac', 'fullbaths', 'heating', 'usecode', 'zoning', 'city', 'altcounty', 'neighborhood', 'zip', 'stories'])
+    prep = prep.drop(columns=['ac', 'fullbaths', 'heating', 'usecode', 'zoning', 'altcounty', 'neighborhood', 'zip', 'stories'])
 
     # IMPUTATIONS
     # We noticed there was a roughly linear correlation between land value and lot size
