@@ -5,12 +5,12 @@ import warnings
 warnings.filterwarnings("ignore")
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, QuantileTransformer, PowerTransformer, RobustScaler, MinMaxScaler
-from wrangle import wrangle_telco
+#from wrangle import wrangle_telco
 
-telco = wrangle_telco()
+# telco = wrangle_telco()
 
-telco_x = telco.loc[:, ['monthly_charges','tenure']].set_index([telco.customer_id])
-telco_y = pd.DataFrame(telco.loc[:, 'total_charges']).set_index([telco.customer_id])
+# telco_x = telco.loc[:, ['monthly_charges','tenure']].set_index([telco.customer_id])
+# telco_y = pd.DataFrame(telco.loc[:, 'total_charges']).set_index([telco.customer_id])
 
 seed = 43
 
