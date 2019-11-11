@@ -63,9 +63,11 @@ def cluster_exam(max_k, X_train, features):
         sse.append(kmeans.inertia_)
     print(pd.DataFrame(dict(k=ks, sse=sse)))
 
+# [Insert into NB]
 # cluster_exam(10, X_train, neighborhood) # Let's go with 7 or 8
 # cluster_exam(10, X_train, amenities) # Probably 3, 5, or 8
 
+# Data of all cluster features added: 
 X3_train = X_train.copy(deep=True)
 test3 = test.copy(deep=True)
 
@@ -82,6 +84,8 @@ test3['amenities'] = amenities_kmeans.predict(test3[amenities])
 neighbor_feats = []
 amenities_feats = []
 
+
+# Encoding cluster features of neighborhood, and amenities, like OHE but not OHE
 for i in range(1, 9):
     X3_train['n' + str(i)] = (X3_train.neighborhood == i).astype(int)
     X3_train['a' + str(i)] = (X3_train.amenities == i).astype(int)
@@ -89,6 +93,7 @@ for i in range(1, 9):
     test3['a' + str(i)] = (test3.amenities == i).astype(int)
     neighbor_feats.append('n' + str(i))
     amenities_feats.append('a' + str(i))
+
 
 X3_train = X3_train.drop(columns=(amenities + neighborhood + ['amenities', 'neighborhood']))
 test3 = test3.drop(columns=(amenities + neighborhood + ['amenities', 'neighborhood']))
