@@ -3,6 +3,7 @@ import numpy as np
 import scipy as sp
 from sklearn.preprocessing import PowerTransformer, LabelEncoder, OneHotEncoder, QuantileTransformer, MinMaxScaler
 from sklearn.cluster import KMeans
+from collections import OrderedDict
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVR
 from sklearn.metrics import mean_squared_error
@@ -129,6 +130,15 @@ def evaluate(model, x_train, y_train):
     y_pred = model.predict(x_train)
     rmse = mean_squared_error(y_train, y_pred)**1/2
     return rmse
+
+def evaluate_dict(model_dict):
+    scores = {}
+    for model in model_dict:
+        obj = model_dict[model]['obj']
+        x = model_dict[model]['data']['x']
+        y = model_dict[model]['data']['y']
+        scores[model] = evaluate(obj, x, y)
+    return scores
 
 # Takes a dictionary of models and returns the best performing model
 # Dictionary format example:
