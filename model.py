@@ -32,12 +32,12 @@ y1_train = train['logerror']
 test1 = test[['sqft', 'lotsqft', 'tax', 'age', 'logerror']]
 
 
-features = ['baths', 'beds', 'sqft', 'fireplace', 'lat', 'long', 'lotsqft', 'pool',
+features = ['beds_and_baths', 'sqft', 'fireplace', 'lat', 'long', 'lotsqft', 'pool',
             'tax', 'age', 'strucvaluebysqft', 'landvaluebysqft', 'la', 'orange', 'ventura']
 target = 'logerror'
 
 # SCALE
-uniform = ['baths', 'beds', 'sqft', 'lotsqft', 'strucvaluebysqft', 'landvaluebysqft', 'tax']
+uniform = ['beds_and_baths', 'sqft', 'lotsqft', 'strucvaluebysqft', 'landvaluebysqft', 'tax']
 minmax = ['lat', 'long', 'age']
 uniform_scaler, train, test = scale(train, test, uniform, scaler='uniform')
 minmax_scaler, train, test = scale(train, test, minmax, scaler='minmax')
@@ -50,7 +50,7 @@ y_test = test[target]
 # CLUSTERS
 neighborhood = ['lat', 'long', 'strucvaluebysqft', 'landvaluebysqft']
 
-amenities = ['baths', 'beds', 'sqft', 'lotsqft', 'age']
+amenities = ['beds_and_baths', 'sqft', 'lotsqft', 'age']
 
 def cluster_exam(max_k, X_train, features):
     ks = range(1, max_k + 1)
@@ -161,6 +161,7 @@ def best_test(model_dict):
 # data3n is data4 but only neighborhood clusters
 rem_neighbor = [c for c in X4_train.columns if c[0] == 'n']
 rem_amenity = [c for c in X4_train.columns if c[0] == 'a']
+insig = ['age', 'la', 'lotsqft', 'orange', 'pool', 'sqft', 'tax']
 X3_train = X3_train.drop(columns='logerror')
 datasets = {
     'data1': {'x': X1_train, 'y': y1_train, 'test': test1},
@@ -171,7 +172,8 @@ datasets = {
     'data3n': {'x': X3_train.drop(columns=amenities_feats), 'y': y_train, 'test': test3.drop(columns=amenities_feats)},
     'data4': {'x': X4_train, 'y': y_train, 'test': test4},
     'data4a': {'x': X4_train.drop(columns=rem_neighbor), 'y': y_train, 'test': test4.drop(columns=rem_neighbor)},
-    'data4n': {'x': X4_train.drop(columns=rem_amenity), 'y': y_train, 'test': test4.drop(columns=rem_amenity)}}
+    'data4n': {'x': X4_train.drop(columns=rem_amenity), 'y': y_train, 'test': test4.drop(columns=rem_amenity)},
+    'data5': {'x': X2_train.drop(columns=insig), 'y': y_train, 'test': test2.drop(columns=insig)}}
 
 def many_models(dataset):
     data_x = dataset['x']
@@ -221,3 +223,5 @@ best_tests = {}
 for dataset in datasets:
     models = many_models(datasets[dataset])
     best_tests[dataset] = [best_test(models)[0]['obj'], best_test(models)[1]]
+
+set(zip(datasets['data5']['x'].columns, best_ones['data5'][0].coef_))
