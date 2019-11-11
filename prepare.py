@@ -66,6 +66,11 @@ def feature_prep(df):
 
     # Make fireplace boolean-ish
     df['fireplace'] = (df[['fireplace']] > 0).astype(int)
+
+    # Convert strucvalue and landvalue to value per sqft
+    df['strucvaluebysqft'] = df['strucvalue'] / df['sqft']
+    df['landvaluebysqft'] = df['landvalue'] / df['lotsqft']
+    df['beds_and_baths'] = df['beds'] + df['baths']
     return df
 
 def prep_zillow(df, outliers=True):
