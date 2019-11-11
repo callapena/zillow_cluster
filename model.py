@@ -53,6 +53,7 @@ neighborhood = ['lat', 'long', 'strucvaluebysqft', 'landvaluebysqft']
 
 amenities = ['beds_and_baths', 'sqft', 'lotsqft', 'age']
 
+# SP - 11/11 changed from a print to a return statement at end of function.
 def cluster_exam(max_k, X_train, features):
     ks = range(1, max_k + 1)
     sse = []
@@ -62,7 +63,8 @@ def cluster_exam(max_k, X_train, features):
 
         # inertia: Sum of squared distanes of samplesto their closest cluster
         sse.append(kmeans.inertia_)
-    print(pd.DataFrame(dict(k=ks, sse=sse)))
+    return pd.DataFrame(dict(k=ks, sse=sse)).assign(change_in_sse=lambda df: df.sse.diff())
+
 
 # [Insert into NB]
 # cluster_exam(10, X_train, neighborhood) # Let's go with 7 or 8
