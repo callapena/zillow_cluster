@@ -18,7 +18,7 @@ Hypothesis: Factors such as location (latitude, and longititude), value, squaref
   - env.py - To connect to sql database you will need a username, password, and host.
   - zillow.csv - If you don't have a connection to sql, we have provided the csv file that contains the queried result from sql.
   - acquire.py - functions to read sql and csv
-  - prepare.py - functions to prep the dataframe (cleaning, fill nulls, etc.)
+  - prepare.py - functions to prep the dataframe cleaning, fill nulls, etc.
   - split_scale.py - function to split and scale dataframe (uniform, and minmax scalers)
   - model.py - function to support exploring (cluster_exam), and run dataframes through models
   
