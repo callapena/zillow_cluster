@@ -13,11 +13,11 @@ import env
 import acquire
 import prepare
 
-df = acquire.get_zillow()
-df = prepare.prep_zillow(df)
-df = df[['logerror','sqft','fips','lat', 'long', 'lotsqft', 'age', 'tax']]
-df.info()
-df.age.value_counts(bins = 10).sort_index()
+zillow = acquire.get_zillow()
+zillow = prepare.prep_zillow(zillow)
+zillow = zillow[['logerror','sqft','fips','lat', 'long', 'lotsqft', 'age', 'tax']]
+zillow.info()
+zillow.age.value_counts(bins = 10).sort_index()
 
 
 #### Home
@@ -36,7 +36,7 @@ sns.distplot(df.sqft)
 
 df.sqft.value_counts(dropna=False)
 
-train, test = train_test_split(df, random_state = 123)
+train, test = train_test_split(zillow, test_size = .3, random_state = 123)
 
 train.info()
 train.sqft.value_counts(dropna=False)
@@ -84,6 +84,19 @@ model = pd.DataFrame({'actual': y.logerror,
 sns.relplot(x = 'lm1', y='actual', data=model)
 sns.relplot(x = 'lm1', y='y_baseline', data=model, color = 'red')
 plt.show()
+
+datasets = {
+    'data1': {'x': X, 'y': y, 'test': X_test}}
+
+datasets['data1']['x']
+
+data_x = dataset['x']
+data_y = dataset['y']
+models = {}
+
+lm2 = LinearRegression()
+lm2.fit(data_x, data_y)
+models['lm2'] = {'obj': lm2, 'data': dataset}
 
 
 
