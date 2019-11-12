@@ -19,6 +19,7 @@ Hypothesis: Factors such as location (latitude, and longititude), value, squaref
   - zillow.csv - If you don't have a connection to sql, we have provided the csv file that contains the queried result from sql.
   - acquire.py - functions to read sql and csv
   - prepare.py - functions to prep the dataframe (cleaning, fill nulls, etc.)
-  - model.py - function to support exploring (cluster_exam), and run dataframes through models.
+  - split_scale.py - function to split and scale dataframe (uniform, and minmax scalers)
+  - model.py - function to support exploring (cluster_exam), and run dataframes through models
   
 
